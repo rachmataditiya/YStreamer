@@ -8,6 +8,7 @@ pub mod h265;
 pub mod hevc;
 pub mod lanes;
 pub mod legacy;
+pub mod passthrough;
 pub mod uvc;
 
 use std::sync::atomic::{AtomicU8, Ordering};

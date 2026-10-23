@@ -10,6 +10,8 @@ export interface Settings {
       bitrate_kbps: number;
       keyframe_secs: number;
     };
+    /** Pass the goggles' link through to DJI Fly on a phone in USB-A */
+    passthrough: boolean;
   };
   /** Off leaves the radios as DJI's apps last set them */
   radio_region: {

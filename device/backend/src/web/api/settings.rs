@@ -114,6 +114,7 @@ pub(super) async fn commit(sv: &Services, next: Settings) -> Result<Json<Saved>,
         if next.input.mode != prev.input.mode || next.input.uvc != prev.input.uvc {
             sv.uvc.apply(&next.input.uvc);
         }
+        sv.passthrough.set_enabled(next.input.passthrough);
     }
 
     // Never refused: an unreachable server is retried in the background
@@ -141,6 +142,7 @@ pub(super) async fn commit(sv: &Services, next: Settings) -> Result<Json<Saved>,
             if next.input.mode != prev.input.mode || next.input.uvc != prev.input.uvc {
                 sv.uvc.apply(&prev.input.uvc);
             }
+            sv.passthrough.set_enabled(prev.input.passthrough);
         }
         if display_changed {
             let _ = sv.player.apply(&prev.display);

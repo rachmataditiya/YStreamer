@@ -82,9 +82,20 @@ export interface DjiStatus {
   cameras: Cameras | null;
 }
 
+/** DJI Fly on an Android phone in a USB-A port */
+export interface PassthroughStatus {
+  state: "off" | "no_phone" | "phone" | "dji_fly";
+  error: string | null;
+  /** Bytes since the service started */
+  to_phone: number;
+  from_phone: number;
+  dropped: number;
+}
+
 export interface InputStatus {
   mode: InputMode;
   dji: DjiStatus;
   uvc: UvcStatus;
   legacy: LegacyStatus;
+  passthrough: PassthroughStatus;
 }
