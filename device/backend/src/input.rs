@@ -1,6 +1,7 @@
 pub mod codec;
 pub mod dji;
 pub mod duml;
+pub mod flv;
 pub mod gadget;
 pub mod goggles;
 pub mod h264;
@@ -10,6 +11,7 @@ pub mod lanes;
 pub mod legacy;
 pub mod liveview;
 pub mod passthrough;
+pub mod rtmp;
 pub mod uvc;
 
 use std::sync::atomic::{AtomicU8, Ordering};
@@ -35,6 +37,7 @@ pub struct InputState {
     pub uvc: Mutex<uvc::UvcStatus>,
     pub legacy: Mutex<legacy::LegacyStatus>,
     pub liveview: Mutex<liveview::LiveviewStatus>,
+    pub rtmp: Mutex<rtmp::RtmpInputStatus>,
 }
 
 impl InputState {
@@ -49,6 +52,7 @@ impl InputState {
             1 => InputMode::Uvc,
             2 => InputMode::DjiFpvLegacy,
             3 => InputMode::DjiGogglesUsb,
+            4 => InputMode::Rtmp,
             _ => InputMode::DjiFpv,
         }
     }
@@ -59,6 +63,7 @@ impl InputState {
             InputMode::Uvc => 1,
             InputMode::DjiFpvLegacy => 2,
             InputMode::DjiGogglesUsb => 3,
+            InputMode::Rtmp => 4,
         };
         self.mode.store(v, Ordering::Relaxed);
     }

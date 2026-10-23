@@ -123,6 +123,8 @@ fn run() -> anyhow::Result<()> {
         Arc::clone(&monitor),
     );
     let liveview = input::liveview::LiveviewSource::start(Arc::clone(&input), Arc::clone(&fanout));
+    let rtmp_input =
+        input::rtmp::RtmpSource::start(Arc::clone(&input), &cfg.input.rtmp, Arc::clone(&fanout));
 
     let services = api::Services {
         store: Arc::clone(&store),
@@ -148,6 +150,7 @@ fn run() -> anyhow::Result<()> {
         legacy,
         passthrough: Arc::clone(&passthrough),
         liveview,
+        rtmp_input,
         overlay: Arc::clone(&overlay),
     };
 

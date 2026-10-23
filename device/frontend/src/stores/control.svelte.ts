@@ -4,6 +4,7 @@ import type {
   InputMode,
   LegacyStatus,
   LiveviewStatus,
+  RtmpInputStatus,
   UvcStatus,
 } from "@/types/input";
 import type { OverlayView } from "@/types/settings";
@@ -53,6 +54,7 @@ class ControlStore {
   uvc = $state<UvcStatus | null>(null);
   legacy = $state<LegacyStatus | null>(null);
   liveview = $state<LiveviewStatus | null>(null);
+  rtmp = $state<RtmpInputStatus | null>(null);
   overlay = $state<OverlayView | null>(null);
   /** The aircraft controls turned on in the Input settings */
   gimbalControl = $state(false);
@@ -144,6 +146,7 @@ class ControlStore {
           this.uvc = msg.uvc;
           this.legacy = msg.legacy;
           this.liveview = msg.liveview;
+          this.rtmp = msg.rtmp;
         }
       } catch {
         // ignore malformed frames

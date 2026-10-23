@@ -115,6 +115,7 @@
     dji_fpv_legacy: "DJI FPV Goggles V1/V2",
     dji_goggles_usb: "DJI Goggles 3 over USB-A",
     uvc: "USB camera",
+    rtmp: "RTMP stream",
   };
 
   const hardware = $derived.by(() => {
@@ -129,6 +130,8 @@
         return "DJI Goggles 3";
       case "uvc":
         return control.uvc?.device ?? "";
+      case "rtmp":
+        return "RTMP app";
       default:
         return "";
     }

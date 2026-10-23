@@ -1,5 +1,9 @@
 export type InputMode =
-  "dji_fpv" | "uvc" | "dji_fpv_legacy" | "dji_goggles_usb";
+  | "dji_fpv"
+  | "uvc"
+  | "dji_fpv_legacy"
+  | "dji_goggles_usb"
+  | "rtmp";
 
 /** Which camera of a two-camera DJI aircraft goes to the outputs */
 export type CameraChoice = "auto" | "main" | "second";
@@ -102,6 +106,19 @@ export interface LiveviewStatus {
   error: string | null;
 }
 
+/** Pushed to the device by OBS, a phone app or DJI Fly */
+export interface RtmpInputStatus {
+  state: "idle" | "waiting" | "connected" | "live" | "error";
+  /** The port listened on */
+  port: number | null;
+  /** Address of the app streaming */
+  publisher: string | null;
+  /** The stream has B-frames, which add delay */
+  reorders: boolean;
+  /** Why the port couldn't be opened, or why the last app was turned away */
+  error: string | null;
+}
+
 export interface InputStatus {
   mode: InputMode;
   dji: DjiStatus;
@@ -109,4 +126,5 @@ export interface InputStatus {
   legacy: LegacyStatus;
   passthrough: PassthroughStatus;
   liveview: LiveviewStatus;
+  rtmp: RtmpInputStatus;
 }

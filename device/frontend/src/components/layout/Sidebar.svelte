@@ -68,6 +68,19 @@
     }
   });
 
+  const rtmpStatus = $derived.by(() => {
+    switch (control.rtmp?.state) {
+      case "live":
+        return { text: "RTMP stream", dot: "bg-ok" };
+      case "connected":
+        return { text: "RTMP app, no video", dot: "bg-warn" };
+      case "error":
+        return { text: "RTMP input error", dot: "bg-down" };
+      default:
+        return { text: "No RTMP stream", dot: "bg-faint" };
+    }
+  });
+
   const status = $derived(
     !control.connected
       ? { text: "Offline", dot: "bg-down" }
@@ -77,7 +90,9 @@
           ? legacyStatus
           : control.inputMode === "dji_goggles_usb"
             ? liveviewStatus
-            : control.link === "live"
+            : control.inputMode === "rtmp"
+              ? rtmpStatus
+              : control.link === "live"
               ? {
                   text: control.goggles?.name ?? "Goggles connected",
                   dot: "bg-ok",

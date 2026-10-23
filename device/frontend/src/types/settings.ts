@@ -12,6 +12,13 @@ export interface Settings {
     };
     /** Pass the goggles' link through to DJI Fly on a phone in USB-A */
     passthrough: boolean;
+    rtmp: {
+      port: number;
+      /** Made up when RTMP is first picked */
+      key: string;
+      /** IP addresses allowed to stream, comma separated; empty for any */
+      allowed_from: string;
+    };
   };
   /** Off leaves the radios as DJI's apps last set them */
   radio_region: {

@@ -20,6 +20,7 @@ pub(super) struct InputStatus {
     legacy: crate::input::legacy::LegacyStatus,
     passthrough: crate::input::passthrough::PassthroughStatus,
     liveview: crate::input::liveview::LiveviewStatus,
+    rtmp: crate::input::rtmp::RtmpInputStatus,
 }
 
 pub(super) async fn input_status(State(sv): State<Services>) -> Json<InputStatus> {
@@ -30,6 +31,7 @@ pub(super) async fn input_status(State(sv): State<Services>) -> Json<InputStatus
         legacy: sv.legacy.status(),
         passthrough: sv.passthrough.status(),
         liveview: sv.liveview.status(),
+        rtmp: sv.rtmp_input.status(),
     })
 }
 
