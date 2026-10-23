@@ -1,3 +1,4 @@
+mod aircraft;
 mod device;
 mod display;
 mod ethernet;
@@ -7,6 +8,7 @@ mod recording;
 mod streaming;
 mod wifi;
 
+pub use aircraft::*;
 pub use device::*;
 pub use display::*;
 pub use ethernet::*;
@@ -39,6 +41,7 @@ const VERSION: u64 = 1;
 pub struct Settings {
     pub input: InputSettings,
     pub radio_region: RadioRegionSettings,
+    pub aircraft: AircraftSettings,
     pub device: DeviceSettings,
     pub wifi: WifiSettings,
     pub ethernet: EthernetSettings,

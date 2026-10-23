@@ -3,6 +3,7 @@ import type { Saved, Section, Settings } from "@/types/settings";
 const SECTIONS: Section[] = [
   "input",
   "radio_region",
+  "aircraft",
   "device",
   "wifi",
   "ethernet",

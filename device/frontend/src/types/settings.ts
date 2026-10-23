@@ -16,6 +16,12 @@ export interface Settings {
     enabled: boolean;
     region: import("@/types/input").RadioRegion;
   };
+  aircraft: {
+    /** Let the browser and a gamepad move the camera */
+    gimbal_control: boolean;
+    /** Offer the Avata 360's own view and lens controls */
+    avata360: boolean;
+  };
   device: { hostname: string; timezone: string };
   wifi: {
     mode: WifiMode;

@@ -63,6 +63,7 @@
     <InputPage
       bind:input={settings.draft.input}
       bind:radioRegion={settings.draft.radio_region}
+      bind:aircraft={settings.draft.aircraft}
     />
   {:else if page.id === "network"}
     <NetworkPage
