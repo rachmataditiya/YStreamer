@@ -28,18 +28,31 @@ const AUD: [u8; 6] = [0, 0, 0, 1, 0x09, 0xf0];
 #[derive(Serialize, Clone, Copy, Debug, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum Converter {
+    /// The H.265 decoder's pictures come out tiled, which neither the
+    /// encoder nor the converter take from GStreamer, so they're untiled
+    /// on the CPU first
     Hardware,
-    /// Decoding on the CPU, e.g. without the H.265 decoder's overlay
+    /// Decoding on the CPU
     SoftwareDecode,
     /// Everything on the CPU, at 720p
     Software,
 }
 
+/// Fastest first. On a Pi 4 with 1080p60 at 20 Mbit/s, decoding on the CPU
+/// and encoding in hardware made 48 pictures a second; the hardware decoder
+/// made 25, held back by untiling
 const CONVERTERS: [Converter; 3] = [
-    Converter::Hardware,
     Converter::SoftwareDecode,
+    Converter::Hardware,
     Converter::Software,
 ];
+
+/// Live pipelines get slice threads only, which for a single-slice stream
+/// is one core; frame threads use all four for a few pictures of delay
+const DECODE: &str = "avdec_h265 thread-type=frame";
+/// The newest picture only: an encoder that falls behind skips pictures
+/// rather than queue them, which would grow the delay without end
+const LATEST: &str = "queue max-size-buffers=1 max-size-bytes=0 max-size-time=0 leaky=downstream";
 
 impl Converter {
     fn elements(self) -> String {
@@ -49,14 +62,15 @@ impl Converter {
             BITRATE_KBPS * 1000
         );
         match self {
-            Self::Hardware => {
-                format!("v4l2slh265dec ! v4l2convert ! video/x-raw,format=I420 ! {hw_encode}")
-            }
-            Self::SoftwareDecode => {
-                format!("avdec_h265 ! videoconvert ! video/x-raw,format=I420 ! {hw_encode}")
-            }
+            Self::Hardware => format!(
+                "v4l2slh265dec ! video/x-raw,format=NV12_128C8 ! {LATEST} ! \
+                 videoconvert n-threads=4 ! video/x-raw,format=NV12 ! {hw_encode}"
+            ),
+            Self::SoftwareDecode => format!(
+                "{DECODE} ! {LATEST} ! videoconvert ! video/x-raw,format=I420 ! {hw_encode}"
+            ),
             Self::Software => format!(
-                "avdec_h265 ! videoconvert ! videoscale ! \
+                "{DECODE} ! {LATEST} ! videoconvert ! videoscale ! \
                  video/x-raw,format=I420,width=1280,height=720 ! \
                  x264enc tune=zerolatency speed-preset=ultrafast bitrate={BITRATE_KBPS} \
                  key-int-max={KEYFRAME_FRAMES} ! video/x-h264,profile=(string)constrained-baseline"
@@ -139,7 +153,7 @@ impl Transcoder {
         Ok(())
     }
 
-    /// Back to trying the hardware first, e.g. for a new link
+    /// Back to trying the fastest converter first, e.g. for a new link
     pub fn stop(&self) {
         stop(self.running.lock().unwrap().take());
         *self.next.lock().unwrap() = 0;
