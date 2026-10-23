@@ -19,6 +19,8 @@ export interface Settings {
       /** IP addresses allowed to stream, comma separated; empty for any */
       allowed_from: string;
     };
+    /** Take off, land and return to home from the Watch page */
+    rc_actions: boolean;
   };
   /** Off leaves the radios as DJI's apps last set them */
   radio_region: {

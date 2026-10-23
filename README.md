@@ -39,7 +39,8 @@ It also changes the **air unit's camera settings** from the browser, shows the
 **goggles' battery and link quality**, passes the goggles' link through to
 **DJI Fly** on an Android phone, offers **remote access** through
 Tailscale or WireGuard, and **updates itself** with signed releases that roll
-back if a new version doesn't start.
+back if a new version doesn't start. Turned on, it offers DJI Fly's **take off,
+land and return to home** buttons too, for a pilot who keeps the remote in hand.
 
 Everything is set up from the web interface at `http://ystreamer.local`. No
 terminal needed.

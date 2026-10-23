@@ -161,3 +161,11 @@ mod rtmp {
         assert!(!r.allows(ip("192.168.1.21")));
     }
 }
+
+#[test]
+fn aircraft_actions_stay_off_unless_turned_on() {
+    assert!(!InputSettings::default().rc_actions);
+    // Settings saved before the switch existed
+    let old: InputSettings = serde_json::from_str(r#"{"mode":"dji_fpv"}"#).unwrap();
+    assert!(!old.rc_actions);
+}

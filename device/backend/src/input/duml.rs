@@ -2,6 +2,7 @@ pub mod aircraft_recorder;
 pub mod avata360;
 pub mod camera;
 pub mod devices;
+pub mod flight;
 pub mod gimbal;
 pub mod link;
 pub mod monitor;

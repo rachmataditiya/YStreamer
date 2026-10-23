@@ -42,6 +42,9 @@ pub struct InputSettings {
     /// On by default: nothing happens until an Android phone is plugged in
     pub passthrough: bool,
     pub rtmp: RtmpInputSettings,
+    /// Take off, land and return to home from the Watch page. The pilot
+    /// keeps the remote in hand, so it's off until they turn it on
+    pub rc_actions: bool,
 }
 
 impl Default for InputSettings {
@@ -52,6 +55,7 @@ impl Default for InputSettings {
             uvc: UvcSettings::default(),
             passthrough: true,
             rtmp: RtmpInputSettings::default(),
+            rc_actions: false,
         }
     }
 }
