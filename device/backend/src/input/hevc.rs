@@ -44,13 +44,6 @@ const CONVERTERS: [Converter; 1] = [Converter::Hardware];
 /// than queue them, which would grow the delay without end
 const LATEST: &str = "queue max-size-buffers=1 max-size-bytes=0 max-size-time=0 leaky=downstream";
 
-/// Live pipelines get slice threads only, which for a single-slice stream
-/// is one core; frame threads use all four for a few pictures of delay
-const DECODE: &str = "avdec_h265 thread-type=frame";
-/// The newest picture only: an encoder that falls behind skips pictures
-/// rather than queue them, which would grow the delay without end
-const LATEST: &str = "queue max-size-buffers=1 max-size-bytes=0 max-size-time=0 leaky=downstream";
-
 impl Converter {
     fn elements(self) -> String {
         let hw_encode = format!(
