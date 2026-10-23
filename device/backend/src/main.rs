@@ -20,6 +20,8 @@ use input::uvc::UvcSource;
 use input::{Fanout, InputState};
 use net::network;
 use output::hdmi::GstPlayer;
+use output::ndi::NdiOutput;
+use output::omt::OmtOutput;
 use output::overlay;
 use output::recording::Recorder;
 use output::rtmp::RtmpOutput;
@@ -50,6 +52,8 @@ fn run() -> anyhow::Result<()> {
     let srt = SrtOutput::new(&cfg.srt);
     let rtmp = RtmpOutput::new(&cfg.rtmp);
     let udp = UdpOutput::new(&cfg.udp);
+    let ndi = NdiOutput::new(&cfg.ndi);
+    let omt = OmtOutput::new(&cfg.omt);
     let recorder = Arc::new(Recorder::new(cfg.recording.clone()));
     // What a transfer onto the card left behind if the power went mid-copy
     output::transfer::clear_unfinished(&recorder.dir());
@@ -96,6 +100,8 @@ fn run() -> anyhow::Result<()> {
         srt: Arc::clone(&srt),
         rtmp: Arc::clone(&rtmp),
         udp: Arc::clone(&udp),
+        ndi: Arc::clone(&ndi),
+        omt: Arc::clone(&omt),
         recorder: Arc::clone(&recorder),
     });
 
@@ -107,6 +113,8 @@ fn run() -> anyhow::Result<()> {
         srt: Arc::clone(&srt),
         rtmp: Arc::clone(&rtmp),
         udp: Arc::clone(&udp),
+        ndi: Arc::clone(&ndi),
+        omt: Arc::clone(&omt),
         recorder: Arc::clone(&recorder),
         web_tx,
         metrics: Arc::clone(&metrics),
@@ -138,6 +146,8 @@ fn run() -> anyhow::Result<()> {
         srt: Arc::clone(&srt),
         rtmp: Arc::clone(&rtmp),
         udp: Arc::clone(&udp),
+        ndi: Arc::clone(&ndi),
+        omt: Arc::clone(&omt),
         player: Arc::clone(&player),
         recorder: Arc::clone(&recorder),
         transfers: output::transfer::Transfers::new(),

@@ -25,6 +25,8 @@ use crate::input::duml::session::Session;
 use crate::input::goggles::Goggles;
 use crate::net::network::Network;
 use crate::output::hdmi::GstPlayer;
+use crate::output::ndi::NdiOutput;
+use crate::output::omt::OmtOutput;
 use crate::output::recording::Recorder;
 use crate::output::rtmp::RtmpOutput;
 use crate::output::rtsp::RtspServer;
@@ -43,6 +45,8 @@ pub struct Services {
     pub srt: Arc<SrtOutput>,
     pub rtmp: Arc<RtmpOutput>,
     pub udp: Arc<UdpOutput>,
+    pub ndi: Arc<NdiOutput>,
+    pub omt: Arc<OmtOutput>,
     pub player: Arc<GstPlayer>,
     pub recorder: Arc<Recorder>,
     pub transfers: Arc<crate::output::transfer::Transfers>,
@@ -139,6 +143,8 @@ pub fn router<S>(services: Services) -> Router<S> {
         .route("/srt", get(streaming::srt_status))
         .route("/rtmp", get(streaming::rtmp_status))
         .route("/udp", get(streaming::udp_status))
+        .route("/ndi", get(streaming::ndi_status))
+        .route("/omt", get(streaming::omt_status))
         .route("/display", get(display::display_status))
         .route("/input", get(streaming::input_status))
         .route("/radio-region", get(radio::region_status))

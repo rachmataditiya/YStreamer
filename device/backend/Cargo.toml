@@ -77,6 +77,12 @@ ed25519-dalek = "3.0.0"
 # RTMP server side, for the RTMP input
 rml_rtmp = "0.8"
 subtle = "2.6"
+# NDI's runtime is opened at run time when installed, never linked
+libloading = "0.8"
+
+[build-dependencies]
+# Compiles the vendored libvmx for the OMT output
+cc = "1"
 
 # Password hashing is far too slow unoptimized
 [profile.dev.package.sha2]
