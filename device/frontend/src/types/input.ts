@@ -1,9 +1,5 @@
 export type InputMode =
-  | "dji_fpv"
-  | "uvc"
-  | "dji_fpv_legacy"
-  | "dji_goggles_usb"
-  | "rtmp";
+  "dji_fpv" | "uvc" | "dji_fpv_legacy" | "dji_goggles_usb" | "rtmp";
 
 /** Which camera of a two-camera DJI aircraft goes to the outputs */
 export type CameraChoice = "auto" | "main" | "second";

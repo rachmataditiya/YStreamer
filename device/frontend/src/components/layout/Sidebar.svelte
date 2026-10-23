@@ -93,13 +93,13 @@
             : control.inputMode === "rtmp"
               ? rtmpStatus
               : control.link === "live"
-              ? {
-                  text: control.goggles?.name ?? "Goggles connected",
-                  dot: "bg-ok",
-                }
-              : control.link === "connecting"
-                ? { text: "Connecting to goggles", dot: "bg-warn" }
-                : { text: "No goggles", dot: "bg-faint" },
+                ? {
+                    text: control.goggles?.name ?? "Goggles connected",
+                    dot: "bg-ok",
+                  }
+                : control.link === "connecting"
+                  ? { text: "Connecting to goggles", dot: "bg-warn" }
+                  : { text: "No goggles", dot: "bg-faint" },
   );
 
   $effect(() => {
