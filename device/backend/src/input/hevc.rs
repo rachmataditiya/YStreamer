@@ -24,7 +24,9 @@ const AUD: [u8; 6] = [0, 0, 0, 1, 0x09, 0xf0];
 
 /// How H.265 becomes the H.264 every output takes. The Pi 4 decodes
 /// H.265 in hardware but only encodes H.264, so this is the one
-/// conversion the device makes; outputs stay as they are
+/// conversion the device makes; outputs stay as they are. Only the
+/// hardware codecs: on the CPU an RC-N3 + Neo 2 stream decoded at 27
+/// pictures a second and the delay grew by the second
 #[derive(Serialize, Clone, Copy, Debug, PartialEq, Eq)]
 #[serde(rename_all = "snake_case")]
 pub enum Converter {
@@ -32,22 +34,15 @@ pub enum Converter {
     /// encoder nor the converter take from GStreamer, so they're untiled
     /// on the CPU first
     Hardware,
-    /// Decoding on the CPU
-    SoftwareDecode,
-    /// Everything on the CPU, at 720p
-    Software,
 }
 
-/// The hardware decoder first: it keeps up with anything a remote sends
-/// (150 pictures a second at 1080p), so pictures never queue in front of
-/// it and the delay stays put; untiling only limits how many get encoded.
-/// On the CPU, an RC-N3 + Neo 2 stream decoded at 27 a second and the
-/// delay grew by the second
-const CONVERTERS: [Converter; 3] = [
-    Converter::Hardware,
-    Converter::SoftwareDecode,
-    Converter::Software,
-];
+const CONVERTERS: [Converter; 1] = [Converter::Hardware];
+
+/// The newest picture only. The decoder keeps up with anything a remote
+/// sends (150 pictures a second at 1080p), so nothing queues in front of
+/// it; when untiling or the encoder fall behind they skip pictures rather
+/// than queue them, which would grow the delay without end
+const LATEST: &str = "queue max-size-buffers=1 max-size-bytes=0 max-size-time=0 leaky=downstream";
 
 /// Live pipelines get slice threads only, which for a single-slice stream
 /// is one core; frame threads use all four for a few pictures of delay
@@ -67,15 +62,6 @@ impl Converter {
             Self::Hardware => format!(
                 "v4l2slh265dec ! video/x-raw,format=NV12_128C8 ! {LATEST} ! \
                  videoconvert n-threads=4 ! video/x-raw,format=NV12 ! {hw_encode}"
-            ),
-            Self::SoftwareDecode => format!(
-                "{DECODE} ! {LATEST} ! videoconvert ! video/x-raw,format=I420 ! {hw_encode}"
-            ),
-            Self::Software => format!(
-                "{DECODE} ! {LATEST} ! videoconvert ! videoscale ! \
-                 video/x-raw,format=I420,width=1280,height=720 ! \
-                 x264enc tune=zerolatency speed-preset=ultrafast bitrate={BITRATE_KBPS} \
-                 key-int-max={KEYFRAME_FRAMES} ! video/x-h264,profile=(string)constrained-baseline"
             ),
         }
     }
