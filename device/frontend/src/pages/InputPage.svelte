@@ -72,7 +72,8 @@
   );
 
   const CONVERTER: Record<string, string> = {
-    hardware: "converted to H.264 in hardware",
+    hardware:
+      "decoded in hardware, untiled on the CPU, encoded to H.264 in hardware",
     software_decode: "decoded on the CPU, encoded to H.264 in hardware",
     software: "converted to H.264 on the CPU, at 720p",
   };
