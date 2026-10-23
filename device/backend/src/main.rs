@@ -57,6 +57,8 @@ fn run() -> anyhow::Result<()> {
     input::gadget::ensure();
     let goggles = Goggles::new();
     let session = Session::start(goggles.clone());
+    let region =
+        duml::region::Applier::start(goggles.clone(), Arc::clone(&session), Arc::clone(&store));
     let monitor = Arc::new(Monitor::new());
     let telemetry = Arc::new(duml::telemetry::Tracker::new());
 
@@ -128,6 +130,7 @@ fn run() -> anyhow::Result<()> {
         button,
         goggles: goggles.clone(),
         session: Arc::clone(&session),
+        region,
         monitor: Arc::clone(&monitor),
         telemetry: Arc::clone(&telemetry),
         splash: Arc::clone(&splash),

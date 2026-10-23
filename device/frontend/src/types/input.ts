@@ -21,6 +21,18 @@ export interface Cameras {
   second: LaneStatus;
 }
 
+/** FCC (United States), CE (the radios' factory setting) or Indonesia */
+export type RadioRegion = "us" | "eu" | "id";
+
+export interface RadioRegionStatus {
+  enabled: boolean;
+  /** This unit changed the region and hasn't put CE back yet */
+  applied: boolean;
+  /** What the goggles connected now were last given in full */
+  active: RadioRegion | null;
+  sent_ms_ago: number | null;
+}
+
 export type UvcFormat = "h264" | "mjpeg" | "raw";
 
 export interface UvcMode {
