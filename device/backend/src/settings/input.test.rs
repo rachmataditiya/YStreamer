@@ -59,3 +59,25 @@ fn passthrough_is_on_unless_turned_off() {
     let off: InputSettings = serde_json::from_str(r#"{"passthrough":false}"#).unwrap();
     assert!(!off.passthrough);
 }
+
+#[test]
+fn input_modes_keep_their_names() {
+    let names: Vec<_> = [
+        InputMode::DjiFpv,
+        InputMode::Uvc,
+        InputMode::DjiFpvLegacy,
+        InputMode::DjiGogglesUsb,
+    ]
+    .iter()
+    .map(|m| serde_json::to_string(m).unwrap())
+    .collect();
+    assert_eq!(
+        names,
+        [
+            "\"dji_fpv\"",
+            "\"uvc\"",
+            "\"dji_fpv_legacy\"",
+            "\"dji_goggles_usb\""
+        ]
+    );
+}

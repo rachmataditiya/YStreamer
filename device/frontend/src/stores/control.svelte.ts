@@ -1,6 +1,11 @@
 import { recording } from "@/stores/recording.svelte";
 import type { AircraftRecorder, LinkedDevice } from "@/types/duml";
-import type { InputMode, LegacyStatus, UvcStatus } from "@/types/input";
+import type {
+  InputMode,
+  LegacyStatus,
+  LiveviewStatus,
+  UvcStatus,
+} from "@/types/input";
 import type { OverlayView } from "@/types/settings";
 import type { Telemetry } from "@/types/telemetry";
 import { snackbar } from "@/stores/snackbar.svelte";
@@ -47,6 +52,7 @@ class ControlStore {
   inputMode = $state<InputMode>("dji_fpv");
   uvc = $state<UvcStatus | null>(null);
   legacy = $state<LegacyStatus | null>(null);
+  liveview = $state<LiveviewStatus | null>(null);
   overlay = $state<OverlayView | null>(null);
   /** The aircraft controls turned on in the Input settings */
   gimbalControl = $state(false);
@@ -137,6 +143,7 @@ class ControlStore {
           this.inputMode = msg.mode;
           this.uvc = msg.uvc;
           this.legacy = msg.legacy;
+          this.liveview = msg.liveview;
         }
       } catch {
         // ignore malformed frames

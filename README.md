@@ -81,6 +81,7 @@ terminal needed.
 | --------------------------------------------- | :---: | :---: | :-------------: | :------------: |
 | DJI Goggles 2, Integra, Goggles 3, Goggles N3 | USB-C |  ✅   |       ✅        |       ✅       |
 | DJI RC-N2 / RC-N3 remote _(experimental)_     | USB-C |  ✅   |       ❔        |       ❔       |
+| DJI Goggles 3, liveview _(experimental)_      | USB-A |  ✅   |       ❌        |       ❌       |
 | DJI FPV Goggles V1 / V2 _(experimental)_      | USB-A |  ✅   |       ❌        |       ❌       |
 | USB cameras, capture sticks, analog receivers | USB-A |  ✅   |        -        |       -        |
 

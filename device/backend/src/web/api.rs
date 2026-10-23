@@ -58,6 +58,7 @@ pub struct Services {
     pub uvc: Arc<crate::input::uvc::UvcSource>,
     pub legacy: Arc<crate::input::legacy::LegacySource>,
     pub passthrough: Arc<crate::input::passthrough::Passthrough>,
+    pub liveview: Arc<crate::input::liveview::LiveviewSource>,
 }
 
 pub fn router<S>(services: Services) -> Router<S> {

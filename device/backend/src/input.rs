@@ -8,6 +8,7 @@ pub mod h265;
 pub mod hevc;
 pub mod lanes;
 pub mod legacy;
+pub mod liveview;
 pub mod passthrough;
 pub mod uvc;
 
@@ -33,6 +34,7 @@ pub struct InputState {
     pub dji: Mutex<dji::DjiStatus>,
     pub uvc: Mutex<uvc::UvcStatus>,
     pub legacy: Mutex<legacy::LegacyStatus>,
+    pub liveview: Mutex<liveview::LiveviewStatus>,
 }
 
 impl InputState {
@@ -46,6 +48,7 @@ impl InputState {
         match self.mode.load(Ordering::Relaxed) {
             1 => InputMode::Uvc,
             2 => InputMode::DjiFpvLegacy,
+            3 => InputMode::DjiGogglesUsb,
             _ => InputMode::DjiFpv,
         }
     }
@@ -55,6 +58,7 @@ impl InputState {
             InputMode::DjiFpv => 0,
             InputMode::Uvc => 1,
             InputMode::DjiFpvLegacy => 2,
+            InputMode::DjiGogglesUsb => 3,
         };
         self.mode.store(v, Ordering::Relaxed);
     }

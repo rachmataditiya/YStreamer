@@ -216,6 +216,7 @@ pub(crate) fn input_msg(services: &crate::web::api::Services) -> String {
         "mode": services.input.mode(),
         "uvc": services.uvc.status(),
         "legacy": services.legacy.status(),
+        "liveview": services.liveview.status(),
     })
     .to_string()
 }

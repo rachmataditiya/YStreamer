@@ -1,4 +1,5 @@
-export type InputMode = "dji_fpv" | "uvc" | "dji_fpv_legacy";
+export type InputMode =
+  "dji_fpv" | "uvc" | "dji_fpv_legacy" | "dji_goggles_usb";
 
 /** Which camera of a two-camera DJI aircraft goes to the outputs */
 export type CameraChoice = "auto" | "main" | "second";
@@ -92,10 +93,20 @@ export interface PassthroughStatus {
   dropped: number;
 }
 
+/** Goggles 3 sharing their liveview over a USB-A cable */
+export interface LiveviewStatus {
+  /** waiting: plugged in, but liveview sharing is off */
+  state: "idle" | "no_device" | "waiting" | "connected" | "live" | "error";
+  /** The goggles' network interface */
+  interface: string | null;
+  error: string | null;
+}
+
 export interface InputStatus {
   mode: InputMode;
   dji: DjiStatus;
   uvc: UvcStatus;
   legacy: LegacyStatus;
   passthrough: PassthroughStatus;
+  liveview: LiveviewStatus;
 }

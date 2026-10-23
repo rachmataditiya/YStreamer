@@ -122,6 +122,7 @@ fn run() -> anyhow::Result<()> {
         goggles.clone(),
         Arc::clone(&monitor),
     );
+    let liveview = input::liveview::LiveviewSource::start(Arc::clone(&input), Arc::clone(&fanout));
 
     let services = api::Services {
         store: Arc::clone(&store),
@@ -146,6 +147,7 @@ fn run() -> anyhow::Result<()> {
         uvc,
         legacy,
         passthrough: Arc::clone(&passthrough),
+        liveview,
         overlay: Arc::clone(&overlay),
     };
 
