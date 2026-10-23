@@ -38,12 +38,14 @@ pub enum Converter {
     Software,
 }
 
-/// Fastest first. On a Pi 4 with 1080p60 at 20 Mbit/s, decoding on the CPU
-/// and encoding in hardware made 48 pictures a second; the hardware decoder
-/// made 25, held back by untiling
+/// The hardware decoder first: it keeps up with anything a remote sends
+/// (150 pictures a second at 1080p), so pictures never queue in front of
+/// it and the delay stays put; untiling only limits how many get encoded.
+/// On the CPU, an RC-N3 + Neo 2 stream decoded at 27 a second and the
+/// delay grew by the second
 const CONVERTERS: [Converter; 3] = [
-    Converter::SoftwareDecode,
     Converter::Hardware,
+    Converter::SoftwareDecode,
     Converter::Software,
 ];
 
@@ -153,7 +155,7 @@ impl Transcoder {
         Ok(())
     }
 
-    /// Back to trying the fastest converter first, e.g. for a new link
+    /// Back to trying the hardware first, e.g. for a new link
     pub fn stop(&self) {
         stop(self.running.lock().unwrap().take());
         *self.next.lock().unwrap() = 0;
