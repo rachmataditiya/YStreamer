@@ -16,14 +16,21 @@ remove_boot_settings() {
 # The OMT output's mDNS announcement, if it was on
 OMT_SERVICE=/etc/avahi/services/ystreamer-omt.service
 
+# Written while the network drive is on; avahi stops announcing it once gone
+remove_drive_announcement() {
+    rm -f /etc/avahi/services/ystreamer-webdav.service
+}
+
 case "$1" in
 remove)
     remove_boot_settings
     rm -f "$OMT_SERVICE"
+    remove_drive_announcement
     ;;
 purge)
     remove_boot_settings
     rm -f "$OMT_SERVICE"
+    remove_drive_announcement
     # Settings and the login; recordings in /var/lib/ystreamer stay
     rm -rf /etc/ystreamer
     ;;
